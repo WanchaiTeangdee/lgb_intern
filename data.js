@@ -26,12 +26,12 @@ const SITE = {
    color   : สีประจำตัวของพี่คนนั้น
    --------------------------------------------------------------------- */
 const PEOPLE = [
-  { id: "natto",    name: "พี่นัตโตะ",   avatar: "images/people/natto.jpg",    emoji: "🥢", color: "#e8cfa8" },
+  { id: "natto",    name: "พี่นัตโตะ",   avatar: "images/people/natto.jpg",    emoji: "🍺", color: "#e8cfa8" },
   { id: "mangpong", name: "พี่แมงป่อง",  avatar: "images/people/mangpong.jpg", emoji: "🦂", color: "#f2b8b5" },
   { id: "boom",     name: "พี่บูม",      avatar: "images/people/boom.jpg",     emoji: "💥", color: "#f6c99a" },
-  { id: "non",      name: "พี่นน",       avatar: "images/people/non.jpg",      emoji: "🐑", color: "#c9d8b6" },
+  { id: "non",      name: "พี่นน",       avatar: "images/people/non.jpg",      emoji: "🐰", color: "#c9d8b6" },
   { id: "guitar",   name: "พี่กีต้าร์",   avatar: "images/people/guitar.jpg",   emoji: "🎸", color: "#cfc3e8" },
-  { id: "aom",      name: "พี่ออม",      avatar: "images/people/aom.jpg",      emoji: "🐷", color: "#f4c2d4" },
+  { id: "aom",      name: "พี่ออม",      avatar: "images/people/aom.jpg",      emoji: "🛏️", color: "#f4c2d4" },
   { id: "man",      name: "พี่แมน",      avatar: "images/people/man.jpg",      emoji: "💪", color: "#b8d8e0" },
   { id: "benz",     name: "พี่เบ็นซ์",    avatar: "images/people/benz.jpg",     emoji: "🚗", color: "#d6d2c4" },
   { id: "bass",     name: "พี่เบส",      avatar: "images/people/bass.jpg",     emoji: "🎧", color: "#c3cfe8" },
@@ -41,7 +41,7 @@ const PEOPLE = [
   { id: "pert",     name: "พี่เพิร์ท",    avatar: "images/people/pert.jpg",     emoji: "🌟", color: "#f0d9a0" },
   { id: "march",    name: "พี่มาร์ช",     avatar: "images/people/march.jpg",    emoji: "🥁", color: "#f2b8b5" },
   { id: "baimon",   name: "พี่ใบหม่อน",  avatar: "images/people/baimon.jpg",   emoji: "🍃", color: "#c9d8b6" },
-  { id: "jai",      name: "พี่ใจ๋",       avatar: "images/people/jai.jpg",      emoji: "💛", color: "#f6e2a0" },
+  { id: "jai",      name: "พี่ใจ๋",       avatar: "images/people/jai.jpg",      emoji: "🍌", color: "#f6e2a0" },
   { id: "kaew",     name: "พี่แก้ว",      avatar: "images/people/kaew.jpg",     emoji: "🥛", color: "#c3cfe8" },
   { id: "dream",    name: "พี่ดรีม",      avatar: "images/people/dream.jpg",    emoji: "🌈", color: "#cfc3e8" },
   { id: "pim",      name: "พี่พิม",      avatar: "images/people/pim.jpg",      emoji: "🌸", color: "#f4c2d4" },
@@ -49,7 +49,7 @@ const PEOPLE = [
   { id: "bua",      name: "พี่บัว",      avatar: "images/people/bua.jpg",      emoji: "🌷", color: "#f2c4c9" },
   { id: "da",       name: "พี่ดา",       avatar: "images/people/da.jpg",       emoji: "⭐", color: "#f0d9a0" },
   { id: "june",     name: "พี่จูน",      avatar: "images/people/june.jpg",     emoji: "🎵", color: "#b8d8e0" },
-  { id: "big",      name: "พี่บิ๊ก",      avatar: "images/people/big.jpg",      emoji: "🐘", color: "#d6d2c4" },
+  { id: "big",      name: "พี่บิ๊ก",      avatar: "images/people/big.jpg",      emoji: "💻", color: "#d6d2c4" },
   { id: "nick",     name: "พี่นิค",      avatar: "images/people/nick.jpg",     emoji: "🦊", color: "#f6c99a" },
   { id: "james",    name: "พี่เจมส์",     avatar: "images/people/james.jpg",    emoji: "🕶️", color: "#c3cfe8" },
 ];
