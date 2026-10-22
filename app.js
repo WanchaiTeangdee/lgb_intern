@@ -222,6 +222,7 @@
           .join("")}
 
         <section class="closing reveal">
+          <p class="thanks">ขอบคุณ ${esc(p.name)} <span aria-hidden="true">♥</span></p>
           <p>${esc(SITE.closing)}</p>
           <a class="btn" href="#/">กลับหน้าแรก</a>
         </section>

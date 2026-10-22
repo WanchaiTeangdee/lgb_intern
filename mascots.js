@@ -113,6 +113,27 @@
     }
   });
 
+  /* ---------------- คำพูดในป้าย: หน้าของพี่ ต่อท้ายด้วยชื่อพี่ เช่น "ขอบคุณครับ พี่นัตโตะ!" ---------------- */
+  const nameFor = () => {
+    const m = location.hash.match(/^#\/to\/([^/?#]+)/);
+    if (!m || typeof PEOPLE === "undefined") return "";
+    const p = PEOPLE.find((x) => x.id === decodeURIComponent(m[1]));
+    return p ? p.name : "";
+  };
+  const withName = (say, name) => (!name ? say : /[!！]$/.test(say) ? `${say.slice(0, -1)} ${name}!` : `${say} ${name}`);
+  const setBubbles = () => {
+    const name = nameFor();
+    ["boy", "girl"].forEach((k) => {
+      const b = dock.querySelector(`.mascot.${k} .bubble`);
+      if (!b || !mc[k]) return;
+      const t = withName(mc[k].say, name);
+      b.textContent = t;
+      b.dataset.orig = t;   // cute.js ใช้ค่านี้คืนคำพูดหลังเลิกชี้การ์ด
+    });
+  };
+  addEventListener("hashchange", setBubbles);
+  setBubbles();
+
   /* ---------------- เลื่อนหน้า → ตัวการ์ตูนไหลลงไปติดขอบซ้าย/ขวา ----------------
      p = 0 : อยู่ที่ช่อง .mascot-slot ใต้หัวเว็บ (มีเฉพาะหน้าแรก)
      p = 1 : ติดขอบล่างซ้าย/ขวาของจอ (หน้าที่ไม่มีช่อง = p = 1 ตลอด) */
