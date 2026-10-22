@@ -9,6 +9,13 @@ const SITE = {
   period: "มิถุนายน – ตุลาคม 2569",
   from: "น้องตี๋ & น้องหมวย",        // แสดงท้ายเว็บ
   signOff: "รักและขอบคุณมากๆ",       // คำลงท้ายจดหมาย ก่อนชื่อคนเขียน
+  // กล่องให้พี่ๆ พิมพ์ตอบกลับในหน้าของตัวเอง → ส่งเข้า Google Form ของเรา (ถึงเราคนเดียว คนอื่นไม่เห็น)
+  // action / messageField ว่างอยู่ = ยังไม่แสดงกล่อง   |   nameField ไม่ใส่ก็ได้ (ใช้ส่งชื่อพี่ไปกับข้อความ)
+  reply: {
+    action: "https://docs.google.com/forms/d/e/1FAIpQLSdWKFghkRn_CTL_DKI1O3IaXfqLQIGRZJpzJtUEma810klpUQ/formResponse",
+    nameField: "entry.1068780888",     // ช่อง "ชื่อพี่"
+    messageField: "entry.1795120621",  // ช่อง "ข้อความ"
+  },
   // ตัวการ์ตูนน้องตี๋ & น้องหมวย ที่หน้าแรก (เปลี่ยนคำพูดได้ / ใส่ mascots: null เพื่อซ่อน)
   cute: true,   // เอฟเฟกต์น่ารักๆ (หัวใจผุดตอนแตะ, คอนเฟตติตอนเปิดซอง, ดาวลอยพื้นหลัง) — ใส่ false เพื่อปิด
   mascots: {
@@ -24,12 +31,14 @@ const SITE = {
    avatar  : รูปโปรไฟล์ เช่น "images/people/natto.jpg" (ไม่มีรูป/หาไฟล์ไม่เจอ จะแสดง emoji แทน)
    emoji   : ใช้แทนรูปโปรไฟล์ตอนไม่มีรูป
    color   : สีประจำตัวของพี่คนนั้น
+   aliases : (ไม่ใส่ก็ได้) ชื่อเก่า เช่น ["พี่นน"] — ถ้าเคยเปลี่ยน name หลังมีคนส่งข้อความตอบกลับแล้ว
+             ให้ใส่ชื่อเก่าไว้ที่นี่ กระดานโน้ต (admin.html) จะรวมข้อความเก่า-ใหม่เป็นพี่คนเดียวกัน
    --------------------------------------------------------------------- */
 const PEOPLE = [
   { id: "natto",    name: "พี่นัตโตะ",   avatar: "images/people/natto.jpg",    emoji: "🍺", color: "#e8cfa8" },
   { id: "mangpong", name: "พี่แมงป่อง",  avatar: "images/people/mangpong.jpg", emoji: "🦂", color: "#f2b8b5" },
   { id: "boom",     name: "พี่บูม",      avatar: "images/people/boom.jpg",     emoji: "💥", color: "#f6c99a" },
-  { id: "non",      name: "พี่นน",       avatar: "images/people/non.jpg",      emoji: "🐰", color: "#c9d8b6" },
+  { id: "non",      name: "พี่นนท์",      avatar: "images/people/non.jpg",      emoji: "🐰", color: "#c9d8b6", aliases: ["พี่นน"] },
   { id: "guitar",   name: "พี่กีต้าร์",   avatar: "images/people/guitar.jpg",   emoji: "🎸", color: "#cfc3e8" },
   { id: "aom",      name: "พี่ออม",      avatar: "images/people/aom.jpg",      emoji: "🛏️", color: "#f4c2d4" },
   { id: "man",      name: "พี่แมน",      avatar: "images/people/man.jpg",      emoji: "💪", color: "#b8d8e0" },

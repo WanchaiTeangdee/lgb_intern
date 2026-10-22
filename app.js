@@ -173,6 +173,57 @@
       </li>`;
   }
 
+  /* ------------------------------ กล่องตอบกลับ ------------------------------ */
+  // ใช้ได้เมื่อตั้ง SITE.reply ใน data.js แล้วเท่านั้น (ยังไม่ตั้ง = ไม่แสดงกล่อง)
+  const REPLY = SITE.reply && SITE.reply.action && SITE.reply.messageField ? SITE.reply : null;
+
+  const replyBox = () =>
+    REPLY
+      ? `<section class="reply reveal">
+           <h2>💌 ส่งข้อความกลับมาหาน้องๆ</h2>
+           <p class="reply-hint">Feedback ความในใจ หรืออะไรก็ได้ที่อยากบอก<br>ส่งถึง ${esc(SITE.from)} เท่านั้น คนอื่นไม่เห็นนะ</p>
+           <form class="reply-form" novalidate>
+             <textarea name="message" rows="5" maxlength="3000" placeholder="พิมพ์ถึงน้องๆ ได้เลย..." aria-label="ข้อความถึง ${esc(SITE.from)}"></textarea>
+             <button class="btn btn-accent" type="submit">ส่งข้อความ 💌</button>
+             <p class="reply-status" role="status" aria-live="polite"></p>
+           </form>
+         </section>`
+      : "";
+
+  function bindReply(root, p) {
+    const form = root.querySelector(".reply-form");
+    if (!form) return;
+    const ta = form.elements.message;
+    const btn = form.querySelector("button");
+    const status = form.querySelector(".reply-status");
+    const KEY = "reply-draft:" + p.id;
+
+    // เก็บข้อความที่พิมพ์ค้างไว้ในเครื่อง กลับมาแล้วไม่หาย
+    try { ta.value = localStorage.getItem(KEY) || ""; } catch {}
+    ta.addEventListener("input", () => { try { localStorage.setItem(KEY, ta.value); } catch {} });
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const text = ta.value.trim();
+      if (!text) { status.textContent = "พิมพ์ข้อความก่อนนะ"; return; }
+      btn.disabled = true;
+      status.textContent = "กำลังส่ง…";
+      try {
+        const body = new URLSearchParams();
+        if (REPLY.nameField) body.set(REPLY.nameField, p.name);
+        body.set(REPLY.messageField, text);
+        // Google Form ไม่ส่ง CORS กลับ (no-cors) จึงตรวจผลไม่ได้ ถือว่าส่งถึงถ้าไม่มี network error
+        await fetch(REPLY.action, { method: "POST", mode: "no-cors", body });
+        ta.value = "";
+        try { localStorage.removeItem(KEY); } catch {}
+        status.textContent = "ส่งแล้ว ขอบคุณมากๆ นะ 💛";
+      } catch {
+        status.textContent = "ส่งไม่สำเร็จ ลองใหม่อีกครั้งนะ";
+      }
+      btn.disabled = false;
+    });
+  }
+
   function renderPerson(p) {
     const letters = lettersFor(p);
     const seen = visited.has(p.id); // เคยเปิดซองแล้ว (เช่น กลับมาจากหน้าแกลเลอรี) ไม่ต้องเปิดซ้ำ
@@ -221,6 +272,8 @@
           )
           .join("")}
 
+        ${replyBox()}
+
         <section class="closing reveal">
           <p class="thanks">ขอบคุณ ${esc(p.name)} <span aria-hidden="true">♥</span></p>
           <div class="closing-actions">
@@ -234,6 +287,7 @@
 
     const main = app.querySelector(".person");
     bindMedia(main);
+    bindReply(main, p);
     if (seen) return observeReveals();
 
     const screen = app.querySelector(".envelope-screen");

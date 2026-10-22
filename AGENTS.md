@@ -9,6 +9,8 @@ Static memory-keepsake website for two interns (น้องตี๋ & น้�
 - Scripts share **globals**, not imports. Load order in [index.html](index.html) matters:
   `data.js` → `letters.js` → `memories.js` → `app.js` → `music.js` → `mascots.js` → `cute.js`.
   The content files define `SITE`, `PEOPLE`, `MUSIC`, `LETTERS`, `MEMORIES`; the rest are IIFEs that read them. `music.js` exposes `window.Music` (used by `app.js` to `duck()`/`restore()` during video playback).
+- Reply box: each letter page ends with a textarea that POSTs (`fetch`, `mode: "no-cors"`) to a Google Form configured in `SITE.reply` in [data.js](data.js). It is hidden until `action` and `messageField` are filled in. Replies go only to the owners' Google Sheet — never render them on the site.
+- Owner-only reply viewer: [admin.html](admin.html) + [admin.js](admin.js) + [admin.css](admin.css) render the replies as sticky notes. It fetches JSON from a Google Apps Script web app (`NOTES_URL` in admin.js; source in [tools/replies-apps-script.gs](tools/replies-apps-script.gs)) guarded by a secret key the owner types in. Never link to it from the public pages, never put the real key in any file in this folder, and never make the Sheet public.
 - Routing is hash-based in [app.js](app.js): `#/` (pick a name), `#/to/<person-id>` (letter), `#/memories` (shared gallery). Keep these URLs stable — people have been given direct links.
 
 ## File map
