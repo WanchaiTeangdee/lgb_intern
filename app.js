@@ -223,8 +223,10 @@
 
         <section class="closing reveal">
           <p class="thanks">ขอบคุณ ${esc(p.name)} <span aria-hidden="true">♥</span></p>
-          <p>${esc(SITE.closing)}</p>
-          <a class="btn" href="#/">กลับหน้าแรก</a>
+          <div class="closing-actions">
+            <a class="btn btn-accent" href="#/memories">📸 ดูความทรงจำรวม</a>
+            <a class="btn" href="#/">กลับหน้าแรก</a>
+          </div>
         </section>
 
         <footer class="foot">ด้วยรัก จาก ${esc(SITE.from)}</footer>

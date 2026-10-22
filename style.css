@@ -538,6 +538,16 @@ button.shot.yt:hover img { transform: scale(1.4); }
   line-height: 1.5;
   box-shadow: 0 8px 20px rgba(208, 112, 79, 0.3);
 }
+.btn-accent {
+  background: var(--accent);
+  box-shadow: 0 6px 16px rgba(208, 112, 79, 0.28);
+}
+.closing-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}
 .btn-link {
   display: block;
   width: max-content;
