@@ -78,6 +78,7 @@ const PEOPLE = [
 const MUSIC = [
   { id: "VqbbrekbL3s", title: "Nobody knows — STAMP & Christopher Chu" },
   { src: "media/music/cornboi-moon.mp3", title: "ก่อนที่ (Moon) — CORNBOI" },
+  { src: "media/music/ถ้าเธอรักใครคนหนึ่ง.mp3", title: "ถ้าเธอรักใครคนหนึ่ง — อิ้งค์ วรันธร" },
   { src: "media/music/yew-lomleang.mp3", title: "ลมแล้ง | Summertime — YEW feat. LANDOKMAI" },
   { src: "media/music/tonyphee-konthisaendee.mp3", title: "คนที่แสนดี — TONY PHEE feat. Q flure" },
 ];
