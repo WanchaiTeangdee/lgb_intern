@@ -27,7 +27,7 @@
       .map(([author, v]) => {
         const o = typeof v === "string" ? { text: v } : v || {};
         const text = String(o.text || "").trim();
-        const media = (Array.isArray(o.media) ? o.media : []).map((it) => toMedia(it, { title: `จดหมายจาก ${author}` })).filter(Boolean);
+        const media = (Array.isArray(o.media) ? o.media : []).map((it) => toMedia(it, { title: `จดหมายจาก ${SITE.from}` })).filter(Boolean);
         return { author, text, media };
       })
       .filter((l) => l.text || l.media.length);
@@ -267,7 +267,7 @@
                 ? `<div class="letter-media">${l.media.map((md, i) => tile(md, "shot-letter", "📸")).join("")}</div>`
                 : ""
             }
-            <p class="sign">${esc(SITE.signOff)}<br><b>${esc(l.author)}</b></p>
+            <p class="sign">${esc(SITE.signOff)}<br><b>${esc(SITE.from)}</b></p>
           </article>`
           )
           .join("")}
