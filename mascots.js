@@ -3,7 +3,6 @@
    ตั้งชื่อ/คำพูดที่ SITE.mascots ใน data.js (ใส่ mascots: null เพื่อซ่อน) */
 (() => {
   const mc = typeof SITE !== "undefined" ? SITE.mascots : null;
-  if (!mc) return;
 
   const esc = (s) =>
     String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
@@ -72,6 +71,10 @@
           </g>
         </g>
       </svg>`;
+
+  // ใช้ภาพน้องๆ ชุดเดียวกันในฉากส่งน้อง แม้ซ่อนตัวการ์ตูนติดขอบจอไว้
+  window.MascotArt = { boy: SVG_BOY, girl: SVG_GIRL };
+  if (!mc) return;
 
   const side = (pos, key, svg) => {
     if (!mc[key]) return "";

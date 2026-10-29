@@ -67,8 +67,8 @@
       // เลือกชื่อพี่ → ตัวการ์ตูนกระโดดดีใจ
       if (t.closest(".person-card")) document.querySelectorAll(".mascot").forEach(hop);
 
-      // แตะที่ว่างๆ → หัวใจเล็กๆ ผุดตรงนิ้ว (ไม่ทำบนตัวการ์ตูน/ปุ่มเพลง/ภาพขยาย/ช่องพิมพ์)
-      if (t.closest(".mascot, .music, .lightbox, input, textarea")) return;
+      // แตะที่ว่างๆ → หัวใจเล็กๆ ผุดตรงนิ้ว (ฉากส่งน้องมีเอฟเฟกต์ของตัวเอง)
+      if (t.closest(".mascot, .music, .lightbox, .farewell, input, textarea")) return;
       pop(e.clientX, e.clientY, ["♥", "✦", "✿"], 4, 44);
     },
     true

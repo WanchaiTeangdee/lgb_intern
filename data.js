@@ -31,36 +31,37 @@ const SITE = {
    avatar  : รูปโปรไฟล์ เช่น "images/people/natto.jpg" (ไม่มีรูป/หาไฟล์ไม่เจอ จะแสดง emoji แทน)
    emoji   : ใช้แทนรูปโปรไฟล์ตอนไม่มีรูป
    color   : สีประจำตัวของพี่คนนั้น
+   gender  : "female" / "male" — ใช้เลือกตัวการ์ตูนในกล่องตอบกลับ หน้าตาแต่ละคนผูกกับ id ใน reply-characters.js
    aliases : (ไม่ใส่ก็ได้) ชื่อเก่า เช่น ["พี่นน"] — ถ้าเคยเปลี่ยน name หลังมีคนส่งข้อความตอบกลับแล้ว
              ให้ใส่ชื่อเก่าไว้ที่นี่ กระดานโน้ต (admin.html) จะรวมข้อความเก่า-ใหม่เป็นพี่คนเดียวกัน
    --------------------------------------------------------------------- */
 const PEOPLE = [
-  { id: "natto",    name: "พี่นัตโตะ",   avatar: "images/people/natto.jpg",    emoji: "🍺", color: "#e8cfa8" },
-  { id: "mangpong", name: "พี่แมงป่อง",  avatar: "images/people/mangpong.jpg", emoji: "🦂", color: "#f2b8b5" },
-  { id: "boom",     name: "พี่บูม",      avatar: "images/people/boom.jpg",     emoji: "💥", color: "#f6c99a" },
-  { id: "non",      name: "พี่นนท์",      avatar: "images/people/non.jpg",      emoji: "🐰", color: "#c9d8b6", aliases: ["พี่นน"] },
-  { id: "guitar",   name: "พี่กีต้าร์",   avatar: "images/people/guitar.jpg",   emoji: "🎸", color: "#cfc3e8" },
-  { id: "aom",      name: "พี่ออม",      avatar: "images/people/aom.jpg",      emoji: "🛏️", color: "#f4c2d4" },
-  { id: "man",      name: "พี่แมน",      avatar: "images/people/man.jpg",      emoji: "💪", color: "#b8d8e0" },
-  { id: "benz",     name: "พี่เบ็นซ์",    avatar: "images/people/benz.jpg",     emoji: "🚗", color: "#d6d2c4" },
-  { id: "bass",     name: "พี่เบส",      avatar: "images/people/bass.jpg",     emoji: "🎧", color: "#c3cfe8" },
-  { id: "tik",      name: "พี่ติ๊ก",      avatar: "images/people/tik.jpg",      emoji: "⏰", color: "#f0d9a0" },
-  { id: "q",        name: "พี่คิว",      avatar: "images/people/q.jpg",        emoji: "🎱", color: "#c9d8b6" },
-  { id: "foam",     name: "พี่โฟม",      avatar: "images/people/foam.jpg",     emoji: "☁️", color: "#b8d8e0" },
-  { id: "pert",     name: "พี่เพิร์ท",    avatar: "images/people/pert.jpg",     emoji: "🌟", color: "#f0d9a0" },
-  { id: "march",    name: "พี่มาร์ช",     avatar: "images/people/march.jpg",    emoji: "🥁", color: "#f2b8b5" },
-  { id: "baimon",   name: "พี่ใบหม่อน",  avatar: "images/people/baimon.jpg",   emoji: "🍃", color: "#c9d8b6" },
-  { id: "jai",      name: "พี่ใจ๋",       avatar: "images/people/jai.jpg",      emoji: "🍌", color: "#f6e2a0" },
-  { id: "kaew",     name: "พี่แก้ว",      avatar: "images/people/kaew.jpg",     emoji: "🥛", color: "#c3cfe8" },
-  { id: "dream",    name: "พี่ดรีม",      avatar: "images/people/dream.jpg",    emoji: "🌈", color: "#cfc3e8" },
-  { id: "pim",      name: "พี่พิม",      avatar: "images/people/pim.jpg",      emoji: "🌸", color: "#f4c2d4" },
-  { id: "per",      name: "พี่เปอร์",     avatar: "images/people/per.jpg",      emoji: "🐱", color: "#e8cfa8" },
-  { id: "bua",      name: "พี่บัว",      avatar: "images/people/bua.jpg",      emoji: "🌷", color: "#f2c4c9" },
-  { id: "da",       name: "พี่ดา",       avatar: "images/people/da.jpg",       emoji: "⭐", color: "#f0d9a0" },
-  { id: "june",     name: "พี่จูน",      avatar: "images/people/june.jpg",     emoji: "🎵", color: "#b8d8e0" },
-  { id: "big",      name: "พี่บิ๊ก",      avatar: "images/people/big.jpg",      emoji: "💻", color: "#d6d2c4" },
-  { id: "nick",     name: "พี่นิค",      avatar: "images/people/nick.jpg",     emoji: "🦊", color: "#f6c99a" },
-  { id: "james",    name: "พี่เจมส์",     avatar: "images/people/james.jpg",    emoji: "🕶️", color: "#c3cfe8" },
+  { id: "natto",    name: "พี่นัตโตะ",   avatar: "images/people/natto.jpg",    emoji: "🍺", color: "#e8cfa8", gender: "male" },
+  { id: "mangpong", name: "พี่แมงป่อง",  avatar: "images/people/mangpong.jpg", emoji: "🦂", color: "#f2b8b5", gender: "male" },
+  { id: "boom",     name: "พี่บูม",      avatar: "images/people/boom.jpg",     emoji: "💥", color: "#f6c99a", gender: "male" },
+  { id: "non",      name: "พี่นนท์",      avatar: "images/people/non.jpg",      emoji: "🐰", color: "#c9d8b6", gender: "male", aliases: ["พี่นน"] },
+  { id: "guitar",   name: "พี่กีต้าร์",   avatar: "images/people/guitar.jpg",   emoji: "🎸", color: "#cfc3e8", gender: "female" },
+  { id: "aom",      name: "พี่ออม",      avatar: "images/people/aom.jpg",      emoji: "🛏️", color: "#f4c2d4", gender: "female" },
+  { id: "man",      name: "พี่แมน",      avatar: "images/people/man.jpg",      emoji: "💪", color: "#b8d8e0", gender: "male" },
+  { id: "benz",     name: "พี่เบ็นซ์",    avatar: "images/people/benz.jpg",     emoji: "🚗", color: "#d6d2c4", gender: "male" },
+  { id: "bass",     name: "พี่เบส",      avatar: "images/people/bass.jpg",     emoji: "🎧", color: "#c3cfe8", gender: "male" },
+  { id: "tik",      name: "พี่ติ๊ก",      avatar: "images/people/tik.jpg",      emoji: "⏰", color: "#f0d9a0", gender: "female" },
+  { id: "q",        name: "พี่คิว",      avatar: "images/people/q.jpg",        emoji: "🎱", color: "#c9d8b6", gender: "male" },
+  { id: "foam",     name: "พี่โฟม",      avatar: "images/people/foam.jpg",     emoji: "☁️", color: "#b8d8e0", gender: "male" },
+  { id: "pert",     name: "พี่เพิร์ท",    avatar: "images/people/pert.jpg",     emoji: "🌟", color: "#f0d9a0", gender: "male" },
+  { id: "march",    name: "พี่มาร์ช",     avatar: "images/people/march.jpg",    emoji: "🥁", color: "#f2b8b5", gender: "male" },
+  { id: "baimon",   name: "พี่ใบหม่อน",  avatar: "images/people/baimon.jpg",   emoji: "🍃", color: "#c9d8b6", gender: "female" },
+  { id: "jai",      name: "พี่ใจ๋",       avatar: "images/people/jai.jpg",      emoji: "🍌", color: "#f6e2a0", gender: "female" },
+  { id: "kaew",     name: "พี่แก้ว",      avatar: "images/people/kaew.jpg",     emoji: "🥛", color: "#c3cfe8", gender: "female" },
+  { id: "dream",    name: "พี่ดรีม",      avatar: "images/people/dream.jpg",    emoji: "🌈", color: "#cfc3e8", gender: "female" },
+  { id: "pim",      name: "พี่พิม",      avatar: "images/people/pim.jpg",      emoji: "🌸", color: "#f4c2d4", gender: "female" },
+  { id: "per",      name: "พี่เปอร์",     avatar: "images/people/per.jpg",      emoji: "🐱", color: "#e8cfa8", gender: "male" },
+  { id: "bua",      name: "พี่บัว",      avatar: "images/people/bua.jpg",      emoji: "🌷", color: "#f2c4c9", gender: "female" },
+  { id: "da",       name: "พี่ดา",       avatar: "images/people/da.jpg",       emoji: "⭐", color: "#f0d9a0", gender: "female" },
+  { id: "june",     name: "พี่จูน",      avatar: "images/people/june.jpg",     emoji: "🎵", color: "#b8d8e0", gender: "male" },
+  { id: "big",      name: "พี่บิ๊ก",      avatar: "images/people/big.jpg",      emoji: "💻", color: "#d6d2c4", gender: "male" },
+  { id: "nick",     name: "พี่นิค",      avatar: "images/people/nick.jpg",     emoji: "🦊", color: "#f6c99a", gender: "male" },
+  { id: "james",    name: "พี่เจมส์",     avatar: "images/people/james.jpg",    emoji: "🕶️", color: "#c3cfe8", gender: "male" },
 ];
 
 /* ---------------------------------------------------------------------

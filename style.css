@@ -487,6 +487,169 @@ button.shot.yt:hover img { transform: scale(1.4); }
 .memory-film-icon { font-size: clamp(2rem, 6vw, 3rem); line-height: 1.2; }
 .memory-film-placeholder p { max-width: 30rem; margin: 0; line-height: 1.6; font-size: 0.95rem; }
 
+/* ฉากส่งน้องฝึกงานกลับบ้านด้วยรอยยิ้ม */
+.farewell {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1.5rem 0 0;
+  text-align: center;
+}
+.farewell h2 { font-size: clamp(1.65rem, 5vw, 2.15rem); }
+.farewell-intro {
+  max-width: 34rem;
+  margin: 0.7rem auto 0;
+  color: var(--muted);
+  font-family: var(--f-hand);
+}
+.farewell-stage {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(24px, 0.4fr) minmax(0, 1fr);
+  align-items: end;
+  gap: clamp(0.25rem, 1.5vw, 0.8rem);
+  min-height: clamp(200px, 43vw, 290px);
+  margin: 1.5rem 0 1.25rem;
+  padding: clamp(0.75rem, 3vw, 1.5rem) clamp(0.5rem, 2vw, 1rem) 1rem;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: linear-gradient(180deg, #fffaf1 0%, #f6e9dc 72%, #eee5ce 100%);
+  box-shadow: 0 12px 30px rgba(59, 50, 44, 0.06);
+}
+.farewell-stage::before {
+  content: "";
+  position: absolute;
+  left: -10%;
+  right: -10%;
+  bottom: -24px;
+  height: 36%;
+  border-radius: 50% 50% 0 0;
+  background: #e2dfc7;
+  opacity: 0.65;
+}
+.farewell-stage::after {
+  content: "✦";
+  position: absolute;
+  top: 12%;
+  left: 48%;
+  color: #d8b572;
+  font-size: 1.2rem;
+}
+.farewell-group { position: relative; z-index: 1; min-width: 0; }
+/* กล่องคำพูดอยู่เหนือหัวแต่ละกลุ่ม และขึ้นบรรทัดใหม่ได้บนมือถือ */
+.farewell-speech {
+  visibility: hidden;
+  position: relative;
+  z-index: 2;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto 0.75rem;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--card);
+  box-shadow: 0 3px 10px rgba(59, 50, 44, 0.06);
+  font-family: var(--f-hand);
+  font-size: clamp(0.8rem, 2.7vw, 1rem);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+.farewell-speech::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  width: 10px;
+  height: 10px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: var(--card);
+  transform: translateX(-50%) rotate(45deg);
+}
+.farewell-speech span { white-space: nowrap; }
+.farewell-group.is-speaking .farewell-speech { visibility: visible; }
+.farewell-cast {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  min-height: clamp(112px, 24vw, 180px);
+  max-width: 230px;
+  margin: 0 auto;
+}
+.farewell-speech + .farewell-cast { min-height: 0; }
+.farewell-person { display: block; position: relative; min-width: 0; }
+.farewell-person svg { display: block; width: 100%; height: auto; overflow: visible; }
+.farewell-colleagues .farewell-cast {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  align-content: end;
+  align-items: end;
+  max-width: 210px;
+}
+.farewell-colleagues .farewell-person { grid-column: span 2; }
+.farewell-colleagues .farewell-person:nth-child(1) { grid-column: 2 / span 2; grid-row: 1; }
+.farewell-colleagues .farewell-person:nth-child(2) { grid-column: 4 / span 2; grid-row: 1; }
+.farewell-colleagues .farewell-person:nth-child(n + 3) { grid-row: 2; z-index: 1; margin-top: -12%; }
+.farewell-interns .farewell-person { width: 50%; max-width: 88px; }
+.farewell-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.6em;
+  margin: 0.45rem 0 0;
+  font-family: var(--f-head);
+  font-size: clamp(0.8rem, 2.5vw, 1rem);
+  line-height: 1.3;
+  text-wrap: balance;
+}
+.farewell-path { position: relative; z-index: 1; align-self: center; height: 48px; color: #c88771; }
+.farewell-path::before {
+  content: "";
+  position: absolute;
+  inset: 18px 0 0;
+  border-top: 2px dashed #cba489;
+  border-radius: 50% 50% 0 0;
+  transform: rotate(-12deg);
+}
+.farewell-path::after { content: "♡"; position: absolute; top: -9px; left: 35%; font-size: 1.5rem; }
+.farewell-particles { position: absolute; z-index: 3; inset: 0; overflow: hidden; pointer-events: none; }
+.farewell-particle {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: block;
+  font-size: clamp(1.1rem, 3vw, 1.65rem);
+  line-height: 1;
+  pointer-events: none;
+}
+.farewell-particle.is-envelope { font-size: clamp(1.7rem, 5vw, 2.4rem); }
+.farewell-send { max-width: 100%; padding: 0.8rem clamp(1rem, 4vw, 1.8rem); font-size: clamp(1rem, 3.5vw, 1.2rem); }
+.farewell-send:focus-visible { outline: 2px dashed var(--accent); outline-offset: 5px; }
+.farewell-send:disabled { cursor: wait; opacity: 0.8; transform: none; }
+.farewell-status { min-height: 3em; max-width: 34rem; margin: 0.9rem auto 0; color: var(--muted); font-family: var(--f-hand); }
+.farewell.is-delivered .farewell-stage { border-color: #d9b094; box-shadow: 0 0 0 3px rgba(208, 112, 79, 0.07); }
+/* ตัวการ์ตูนในฉากจะขยับเฉพาะตอนกดส่ง */
+.farewell-arm { transform-origin: 71px 94px; }
+.farewell .m-bob, .farewell .m-shadow, .farewell .m-head, .farewell .m-eyes, .farewell .m-arm { animation: none; }
+.farewell.no-motion, .farewell.no-motion * { animation: none !important; transition: none !important; }
+body.farewell-in-view .mascot-dock { visibility: hidden; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .farewell-interns.is-receiving .farewell-person { animation: farewell-receive 0.65s ease-out 1; }
+  .farewell-interns.is-receiving .farewell-muay { animation-delay: 0.12s; }
+  .farewell-interns.is-waving .m-arm { animation: wave 0.7s ease-in-out 2; }
+  .farewell-interns.is-waving .m-arm-l { animation-name: wave-l; }
+  .farewell.is-sending .farewell-colleagues .m-arm,
+  .farewell.is-sending .farewell-colleagues .farewell-arm { animation: wave 0.8s ease-in-out 2; }
+}
+@keyframes farewell-receive {
+  0%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-10px) rotate(-3deg); }
+  70% { transform: translateY(0) scale(1.03, 0.97); }
+}
+
 .closing {
   margin: 2rem auto 0;
   padding: 2.5rem 1.5rem;
@@ -500,8 +663,8 @@ button.shot.yt:hover img { transform: scale(1.4); }
 /* กล่องให้พี่ๆ พิมพ์ตอบกลับ */
 .reply {
   margin: 0 auto;
-  padding: 1.75rem 1.5rem;
-  max-width: 560px;
+  padding: 1.5rem 1rem;
+  max-width: 640px;
   text-align: center;
   background: var(--card);
   border: 1.5px dashed color-mix(in srgb, var(--c) 70%, var(--line));
@@ -513,6 +676,123 @@ button.shot.yt:hover img { transform: scale(1.4); }
   font-size: clamp(1.25rem, 4.5vw, 1.5rem);
 }
 .reply-hint { margin: 0 0 1.1rem; color: var(--muted); font-family: var(--f-hand); font-size: 0.95rem; }
+/* พี่เจ้าของจดหมายอยู่ซ้าย ส่วนน้องตี๋กับน้องหมวยรอรับทางขวา */
+.reply-scene {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+  min-height: 153px;
+  margin: 0.5rem auto 0;
+  padding: 0.5rem 0 0;
+  isolation: isolate;
+}
+.reply-cast {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 0 0 auto;
+  min-width: 0;
+}
+.reply-character { display: block; width: 76px; }
+.reply-character-svg,
+.reply-character > .m-svg { display: block; width: 100%; height: auto; overflow: visible; }
+.reply-interns { display: flex; align-items: flex-end; gap: 0; }
+.reply-interns .reply-character { width: 59px; }
+.reply-name {
+  display: block;
+  max-width: 100%;
+  margin-top: 0.3rem;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--ink);
+  font-family: var(--f-hand);
+  font-size: 0.75rem;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+.reply-sender .reply-name { border-color: var(--c); background: color-mix(in srgb, var(--c) 16%, var(--card)); }
+.reply-airmail { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+.reply-route {
+  position: absolute;
+  top: 52%;
+  left: 33%;
+  right: 48%;
+  height: 25px;
+  border-top: 2px dashed #dfc0b1;
+  border-radius: 50% 50% 0 0;
+  transform: rotate(-9deg);
+  color: var(--accent);
+  font-size: 0.8rem;
+  text-align: center;
+}
+.reply-route::after {
+  content: "♥";
+  position: absolute;
+  top: -12px;
+  left: calc(50% - 7px);
+  width: 16px;
+  background: var(--card);
+}
+.reply-envelope {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 40px;
+  height: 32px;
+  opacity: 0;
+  font-size: 2rem;
+  line-height: 1;
+  filter: drop-shadow(0 3px 3px rgba(123, 76, 58, 0.14));
+}
+.reply-envelope svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.reply-delivery {
+  min-height: 1.6em;
+  margin: 0.75rem 0 1rem;
+  color: var(--muted);
+  font-family: var(--f-hand);
+  font-size: 0.8rem;
+}
+.reply.is-sending .reply-route { opacity: 0.4; }
+.reply.is-sending .reply-held-letter,
+.reply.is-delivered .reply-held-letter { opacity: 0; }
+.reply.is-delivered .reply-delivery { color: #987446; }
+.reply .m-bob,
+.reply .m-shadow,
+.reply .m-head,
+.reply .m-eyes,
+.reply .m-arm { animation: none; }
+.reply .m-arm { transform-origin: 84px 104px; }
+.reply .m-arm-l { transform-origin: 36px 104px; }
+.reply-character-arm { transform-origin: 84px 104px; }
+body.reply-in-view .mascot-dock { visibility: hidden; }
+@media (min-width: 480px) {
+  .reply { padding: 1.75rem 1.5rem; }
+  .reply-scene { min-height: 187px; padding: 0.5rem 0.75rem 0; }
+  .reply-character { width: 104px; }
+  .reply-interns .reply-character { width: 82px; }
+  .reply-name { padding: 0.2rem 0.75rem; font-size: 0.85rem; }
+  .reply-route { left: 29%; right: 41%; top: 53%; }
+  .reply-delivery { font-size: 0.85rem; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .reply.is-sending:not(.no-motion) .reply-character-arm { animation: wave 0.8s ease-in-out 2; }
+  .reply.is-delivered:not(.no-motion) .reply-interns .reply-character { animation: reply-receive 0.7s ease-in-out 2; }
+  .reply.is-delivered:not(.no-motion) .reply-interns .reply-muay { animation-delay: 0.12s; }
+  .reply.is-delivered:not(.no-motion) .m-arm { animation: wave 0.7s ease-in-out 2; }
+  .reply.is-delivered:not(.no-motion) .m-arm-l { animation-name: wave-l; }
+}
+@keyframes reply-receive {
+  0%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-8px) rotate(-3deg); }
+  70% { transform: translateY(0) scale(1.03, 0.97); }
+}
 .reply-form textarea {
   display: block;
   width: 100%;

@@ -1,4 +1,5 @@
-/* เพลงประกอบเว็บ — เล่นต่อเนื่องข้ามทุกหน้า วนรอบรายการ MUSIC ใน data.js
+/* เพลงประกอบเว็บ — ลองเล่นทันทีเมื่อเข้าเว็บ เล่นต่อเนื่องข้ามทุกหน้า วนรอบรายการ MUSIC ใน data.js
+   ถ้าเบราว์เซอร์บล็อกเสียง จะรอให้แตะหน้าเว็บก่อน และจำการกดหยุดเพลงไว้
    เพลงแต่ละเพลงเป็นได้ 2 แบบ
      { id: "xxxxxxxxxxx", title }       ← YouTube (ถ้าเจ้าของเพลงปิดการฝัง จะเล่นไม่ได้ → ข้ามไปเพลงถัดไป)
      { src: "media/music/a.mp3", title } ← ไฟล์เสียงของเราเอง (เล่นได้แน่นอน) */
@@ -39,6 +40,7 @@
 
   const $ = (sel) => ui.querySelector(sel);
   const btn = $(".music-btn");
+  const icon = $(".music-icon");
   const nextBtn = $(".music-next");
   const titleEl = $(".music-title");
   const listBtn = $(".music-listbtn");
@@ -67,6 +69,7 @@
   let ytReady = false;
   let pendingLoad = false;
   let audio = null;
+  let playAttempt = 0;      // แยกคำสั่งเล่น เพื่อไม่ให้ผลคำสั่งเก่ารบกวนคำสั่งใหม่
 
   const getAudio = () => {
     if (audio) return audio;
@@ -85,8 +88,25 @@
   };
 
   const silenceAll = () => {
+    playAttempt++;
     if (audio) audio.pause();
     if (ytReady) yt.pauseVideo();
+  };
+
+  const waitForGesture = () => {
+    wantPlay = false;
+    playing = false;
+    paint();
+  };
+
+  const playAudio = () => {
+    const mine = ++playAttempt;
+    getAudio().play().catch((err) => {
+      if (mine !== playAttempt || isYt() || ducked || userPaused || !wantPlay) return;
+      if (err && err.name === "AbortError") return;            // ถูกคำสั่งอื่นแทรก ไม่ใช่เพลงพัง
+      if (err && err.name === "NotAllowedError") return waitForGesture();
+      trackFailed("เล่นไม่ได้");
+    });
   };
 
   const load = (i) => {
@@ -105,18 +125,7 @@
       const a = getAudio();
       a.src = t.src;
       a.volume = vol / 100;
-      const mine = idx;
-      a.play().catch((err) => {
-        if (mine !== idx || isYt()) return;                     // ผู้ใช้ข้ามไปเพลงอื่นแล้ว
-        if (err && err.name === "AbortError") return;           // ถูกคำสั่งโหลดเพลงใหม่แทรก (กดข้ามรัว) ไม่ใช่เพลงพัง
-        if (err && err.name === "NotAllowedError") {            // เบราว์เซอร์ยังไม่อนุญาตให้เล่นเอง → รอให้แตะ
-          wantPlay = false;
-          playing = false;
-          paint();
-          return;
-        }
-        trackFailed("เล่นไม่ได้");
-      });
+      playAudio();
     } else if (ytReady) {
       yt.loadVideoById(t.id);
     } else {
@@ -155,23 +164,29 @@
 
   const start = () => {
     wantPlay = true;
-    if (ducked) return;
+    if (ducked) return paint();
     if (!started || pendingLoad) return load(idx);
-    if (isYt() ? ytReady : true) (isYt() ? yt.playVideo() : getAudio().play().catch(() => {}));
+    if (isYt()) {
+      if (ytReady) yt.playVideo();
+    } else playAudio();
+    paint();
   };
   const stop = () => {
     wantPlay = false;
+    playing = false;
     silenceAll();
   };
 
   /* ---------------- ส่วนแสดงผล ---------------- */
   const paint = (msg) => {
+    const active = playing || wantPlay;
     ui.classList.toggle("on", playing);
-    ui.classList.toggle("idle", !playing && !userPaused && !msg);
+    ui.classList.toggle("idle", !active && !userPaused && !msg);
     ui.classList.toggle("fail", !!msg);
-    btn.setAttribute("aria-label", playing ? "หยุดเพลง" : "เปิดเพลง");
+    btn.setAttribute("aria-label", active ? "หยุดเพลง" : "เปิดเพลง");
+    icon.textContent = active ? "⏸" : "♪";
     titleEl.textContent =
-      msg || (playing ? `♪ ${idx + 1}/${LIST.length} ${cur().title || ""}` : userPaused ? "" : "แตะเพื่อเปิดเพลง");
+      msg || (playing ? `♪ ${idx + 1}/${LIST.length} ${cur().title || ""}` : userPaused ? "" : ducked && wantPlay ? "พักเพลงระหว่างดูคลิป" : wantPlay ? "กำลังเปิดเพลง…" : "แตะเพื่อเปิดเพลง");
     ui.classList.toggle("has-title", !!titleEl.textContent);
     renderList();
   };
@@ -253,11 +268,11 @@
   document.addEventListener("click", (e) => { if (!ui.contains(e.target)) closePops(); });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") closePops(); });
 
-  // เบราว์เซอร์ไม่ให้เล่นเสียงเองก่อนที่คนจะแตะ → เริ่มเล่นตอนแตะครั้งแรกที่ไหนก็ได้ในหน้า
+  // ถ้าเบราว์เซอร์บล็อกเสียง ให้ลองอีกครั้งเมื่อแตะที่ไหนก็ได้ในหน้า
   document.addEventListener(
     "click",
     (e) => {
-      if (ui.contains(e.target) || e.target.closest(".memory-film-player") || ducked || userPaused || playing || wantPlay) return;
+      if (ui.contains(e.target) || e.target.closest(".memory-film-player") || ducked || userPaused || playing) return;
       start();
     },
     { capture: true }
@@ -297,6 +312,9 @@
             if (ducked || userPaused || !wantPlay) return;
             if (pendingLoad || (wantPlay && isYt())) { pendingLoad = false; load(idx); }
           },
+          onAutoplayBlocked: () => {
+            if (isYt() && !ducked && !userPaused && !playing && wantPlay) waitForGesture();
+          },
           onStateChange: (e) => {
             if (!isYt()) return;   // เหตุการณ์ค้างจากเพลงก่อนหน้า (กำลังเล่นไฟล์เสียงอยู่)
             const S = YT.PlayerState;
@@ -327,4 +345,5 @@
 
   paint();
   paintVol();
+  if (!userPaused) start();
 })();

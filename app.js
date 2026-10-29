@@ -164,12 +164,38 @@
   /* ------------------------------ กล่องตอบกลับ ------------------------------ */
   // ใช้ได้เมื่อตั้ง SITE.reply ใน data.js แล้วเท่านั้น (ยังไม่ตั้ง = ไม่แสดงกล่อง)
   const REPLY = SITE.reply && SITE.reply.action && SITE.reply.messageField ? SITE.reply : null;
+  let cleanupReply = () => {};
 
-  const replyBox = () =>
+  const replyBox = (p) =>
     REPLY
       ? `<section class="reply reveal">
            <h2>💌 ส่งข้อความกลับมาหาน้องๆ</h2>
            <p class="reply-hint">Feedback ความในใจ หรืออะไรก็ได้ที่อยากบอก<br>ส่งถึง ${esc(SITE.from)} เท่านั้น คนอื่นไม่เห็นนะ</p>
+           <div class="reply-scene" role="group" aria-label="ส่งจดหมายจาก ${esc(p.name)} ไปหาน้องตี๋และน้องหมวย">
+             <div class="reply-sender reply-cast">
+               <span class="reply-character" aria-hidden="true">${typeof window.ReplyCharacters !== "undefined" ? window.ReplyCharacters.person(p) : esc(p.emoji || "😊")}</span>
+               <span class="reply-name">${esc(p.name)}</span>
+             </div>
+             <div class="reply-airmail" aria-hidden="true">
+               <span class="reply-route"></span>
+               <span class="reply-envelope">
+                 <svg viewBox="0 0 40 32" aria-hidden="true">
+                   <rect x="1" y="3" width="38" height="26" rx="4" fill="#fff8ed" stroke="#d0704f" stroke-width="1.5"/>
+                   <path d="M2 27 L16 15 M38 27 L24 15" fill="none" stroke="#e6bd9f" stroke-width="1.5"/>
+                   <path d="M2 5 L18 18 Q20 20 22 18 L38 5" fill="#f6dfce" stroke="#d0704f" stroke-width="1.5" stroke-linejoin="round"/>
+                   <path d="M20 12 C14 7 12 15 20 20 C28 15 26 7 20 12Z" fill="#dc8290"/>
+                 </svg>
+               </span>
+             </div>
+             <div class="reply-recipients reply-cast">
+               <div class="reply-interns" aria-hidden="true">
+                 <span class="reply-character reply-tee">👦🏻</span>
+                 <span class="reply-character reply-muay">👧🏻</span>
+               </div>
+               <span class="reply-name">น้องตี๋ &amp; น้องหมวย</span>
+             </div>
+           </div>
+           <p class="reply-delivery">ฝากความในใจมากับจดหมายได้เลย 💛</p>
            <form class="reply-form" novalidate>
              <textarea name="message" rows="5" maxlength="3000" placeholder="พิมพ์ถึงน้องๆ ได้เลย..." aria-label="ข้อความถึง ${esc(SITE.from)}"></textarea>
              <button class="btn btn-accent" type="submit">ส่งข้อความ 💌</button>
@@ -184,31 +210,155 @@
     const ta = form.elements.message;
     const btn = form.querySelector("button");
     const status = form.querySelector(".reply-status");
+    const box = form.closest(".reply");
+    const scene = box.querySelector(".reply-scene");
+    const envelope = box.querySelector(".reply-envelope");
+    const delivery = box.querySelector(".reply-delivery");
     const KEY = "reply-draft:" + p.id;
+    const reducedMotion = window.matchMedia ? matchMedia("(prefers-reduced-motion: reduce)") : null;
+    let active = true;
+    let animation = null;
+    let flightDone = null;
+    let observer = null;
+
+    // ใช้รูปน้องๆ ชุดเดียวกับตัวการ์ตูนติดขอบจอ รอไฟล์ mascots.js ถ้าเปิดลิงก์พี่โดยตรง
+    const fillInterns = () => {
+      if (!active || typeof window.MascotArt === "undefined") return;
+      if (window.MascotArt.boy) box.querySelector(".reply-tee").innerHTML = window.MascotArt.boy;
+      if (window.MascotArt.girl) box.querySelector(".reply-muay").innerHTML = window.MascotArt.girl;
+    };
+    fillInterns();
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", fillInterns, { once: true });
+
+    const stopFlight = () => {
+      if (animation) animation.cancel();
+      animation = null;
+      const done = flightDone;
+      flightDone = null;
+      if (done) done();
+    };
+    const updateMotion = () => {
+      const noMotion = !!reducedMotion?.matches || SITE.cute === false;
+      box.classList.toggle("no-motion", noMotion);
+      if (noMotion) stopFlight();
+    };
+    updateMotion();
+    if (reducedMotion?.addEventListener) reducedMotion.addEventListener("change", updateMotion);
+    else if (reducedMotion?.addListener) reducedMotion.addListener(updateMotion);
+
+    // หลบตัวการ์ตูนติดขอบจอเมื่อมองเห็นฉากส่งจดหมาย เพื่อไม่ให้บังช่องพิมพ์
+    const updateVisibility = () => {
+      const rect = scene.getBoundingClientRect();
+      document.body.classList.toggle("reply-in-view", active && rect.width > 0 && rect.top < innerHeight && rect.bottom > 0);
+    };
+    if ("IntersectionObserver" in window) {
+      observer = new IntersectionObserver((entries) => {
+        if (active) document.body.classList.toggle("reply-in-view", entries.some((entry) => entry.isIntersecting));
+      });
+      observer.observe(box);
+    } else {
+      addEventListener("scroll", updateVisibility, { passive: true });
+      addEventListener("resize", updateVisibility);
+      updateVisibility();
+    }
+
+    const flyLetter = () => {
+      stopFlight();
+      updateMotion();
+      if (box.classList.contains("no-motion") || typeof envelope.animate !== "function") return Promise.resolve();
+      const stage = scene.getBoundingClientRect();
+      const from = box.querySelector(".reply-sender .reply-character").getBoundingClientRect();
+      const to = box.querySelector(".reply-interns").getBoundingClientRect();
+      const startX = from.left - stage.left + from.width * 0.85 - 20;
+      const startY = from.top - stage.top + from.height * 0.69 - 16;
+      const endX = to.left - stage.left + to.width * 0.45 - 20;
+      const endY = to.top - stage.top + to.height * 0.58 - 16;
+      const middleX = (startX + endX) / 2;
+      const middleY = Math.min(startY, endY) - Math.min(48, Math.max(20, (endX - startX) * 0.28));
+      return new Promise((resolve) => {
+        flightDone = resolve;
+        try {
+          animation = envelope.animate([
+            { transform: `translate(${startX}px, ${startY}px) scale(0.65) rotate(-15deg)`, opacity: 0 },
+            { offset: 0.12, opacity: 1 },
+            { offset: 0.5, transform: `translate(${middleX}px, ${middleY}px) scale(1.12) rotate(7deg)`, opacity: 1 },
+            { offset: 0.88, opacity: 1 },
+            { transform: `translate(${endX}px, ${endY}px) scale(0.65) rotate(-8deg)`, opacity: 0 },
+          ], { duration: 1200, easing: "ease-in-out", fill: "both" });
+          animation.onfinish = stopFlight;
+        } catch {
+          stopFlight();
+        }
+      });
+    };
+
+    cleanupReply = () => {
+      active = false;
+      stopFlight();
+      observer?.disconnect();
+      document.removeEventListener("DOMContentLoaded", fillInterns);
+      removeEventListener("scroll", updateVisibility);
+      removeEventListener("resize", updateVisibility);
+      if (reducedMotion?.removeEventListener) reducedMotion.removeEventListener("change", updateMotion);
+      else if (reducedMotion?.removeListener) reducedMotion.removeListener(updateMotion);
+      document.body.classList.remove("reply-in-view");
+    };
 
     // เก็บข้อความที่พิมพ์ค้างไว้ในเครื่อง กลับมาแล้วไม่หาย
     try { ta.value = localStorage.getItem(KEY) || ""; } catch {}
-    ta.addEventListener("input", () => { try { localStorage.setItem(KEY, ta.value); } catch {} });
+    ta.addEventListener("input", () => {
+      try { localStorage.setItem(KEY, ta.value); } catch {}
+      if (!btn.disabled) {
+        box.classList.remove("is-delivered");
+        delivery.textContent = "ฝากความในใจมากับจดหมายได้เลย 💛";
+        status.textContent = "";
+      }
+    });
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
+      if (btn.disabled || !active) return;
       const text = ta.value.trim();
-      if (!text) { status.textContent = "พิมพ์ข้อความก่อนนะ"; return; }
+      if (!text) { status.textContent = "พิมพ์ข้อความก่อนนะ"; ta.focus(); return; }
       btn.disabled = true;
+      ta.readOnly = true;
+      form.setAttribute("aria-busy", "true");
+      box.classList.remove("is-delivered");
+      box.classList.add("is-sending");
+      delivery.textContent = "จดหมายกำลังเดินทางไปหาน้องๆ 💌";
+      btn.textContent = "กำลังส่งจดหมาย…";
       status.textContent = "กำลังส่ง…";
+      const flight = flyLetter();
       try {
         const body = new URLSearchParams();
         if (REPLY.nameField) body.set(REPLY.nameField, p.name);
         body.set(REPLY.messageField, text);
         // Google Form ไม่ส่ง CORS กลับ (no-cors) จึงตรวจผลไม่ได้ ถือว่าส่งถึงถ้าไม่มี network error
         await fetch(REPLY.action, { method: "POST", mode: "no-cors", body });
+        // ลบร่างเมื่อส่งสำเร็จ แม้พี่จะเปลี่ยนหน้าไประหว่างรอ แต่ไม่ลบร่างใหม่ที่เขียนเพิ่ม
+        try {
+          if ((localStorage.getItem(KEY) || "").trim() === text) localStorage.removeItem(KEY);
+        } catch {}
+        await flight;
+        if (!active) return;
         ta.value = "";
-        try { localStorage.removeItem(KEY); } catch {}
+        box.classList.add("is-delivered");
+        delivery.textContent = "ขอบคุณสำหรับจดหมายนะ " + p.name + " 💛";
         status.textContent = "ส่งแล้ว ขอบคุณมากๆ นะ 💛";
       } catch {
+        stopFlight();
+        if (!active) return;
+        delivery.textContent = "จดหมายยังอยู่ ลองส่งให้น้องๆ อีกทีนะ 💌";
         status.textContent = "ส่งไม่สำเร็จ ลองใหม่อีกครั้งนะ";
+      } finally {
+        if (active) {
+          box.classList.remove("is-sending");
+          form.removeAttribute("aria-busy");
+          ta.readOnly = false;
+          btn.disabled = false;
+          btn.textContent = "ส่งข้อความ 💌";
+        }
       }
-      btn.disabled = false;
     });
   }
 
@@ -260,7 +410,7 @@
           )
           .join("")}
 
-        ${replyBox()}
+        ${replyBox(p)}
 
         <section class="closing reveal">
           <p class="thanks">ขอบคุณ ${esc(p.name)} <span aria-hidden="true">♥</span></p>
@@ -353,6 +503,31 @@
     });
   }
 
+  // ฉากส่งน้องท้ายหน้า ตัวการ์ตูนและหัวใจลอยเติมโดย farewell.js
+  function farewellSection() {
+    return `
+      <section class="farewell reveal" aria-labelledby="farewell-title">
+        <h2 id="farewell-title">ส่งน้องๆ ด้วยรอยยิ้ม</h2>
+        <p class="farewell-intro">กดส่งหัวใจจากพี่ๆ ไปให้น้องตี๋กับน้องหมวยกัน 💛</p>
+        <div class="farewell-stage">
+          <div class="farewell-group farewell-colleagues">
+            <p class="farewell-speech" aria-hidden="true">โชคดีน้าา<span>น้องตี๋</span> <span>น้องหมวย</span></p>
+            <div class="farewell-cast" aria-hidden="true"></div>
+            <p class="farewell-label">พี่ๆ LGB</p>
+          </div>
+          <div class="farewell-path" aria-hidden="true"></div>
+          <div class="farewell-group farewell-interns">
+            <p class="farewell-speech" aria-hidden="true">ขอบคุณน้าาพี่ๆ บ๊ายบายย</p>
+            <div class="farewell-cast" aria-hidden="true"></div>
+            <p class="farewell-label">น้องตี๋ &amp; น้องหมวย</p>
+          </div>
+          <div class="farewell-particles" aria-hidden="true"></div>
+        </div>
+        <button class="btn btn-accent farewell-send" type="button">ส่งน้องตี๋กับน้องหมวย</button>
+        <p class="farewell-status" role="status" aria-live="polite" aria-atomic="true"></p>
+      </section>`;
+  }
+
   /* ------------------------- หน้าความทรงจำรวม ------------------------- */
   function renderGallery() {
     const mems = MEMORY_LIST;
@@ -380,6 +555,8 @@
         <section class="closing reveal">
           <a class="btn" href="#/">กลับหน้าแรก</a>
         </section>
+
+        ${farewellSection()}
 
         <footer class="foot">ด้วยรัก จาก ${esc(SITE.from)}</footer>
       </main>`;
@@ -474,6 +651,8 @@
 
   /* ------------------------------ Router ------------------------------ */
   function route() {
+    cleanupReply();
+    cleanupReply = () => {};
     pauseMemoryVideo();
     closeLightbox();
     const m = location.hash.match(/^#\/to\/([^/?#]+)/);
