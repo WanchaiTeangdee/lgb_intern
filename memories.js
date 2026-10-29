@@ -24,6 +24,18 @@
    poster      : รูปปกก่อนกดเล่น เช่น "media/memories-film-cover.jpg" (ไม่ใส่ก็ได้)
    คลิปเริ่มเมื่อกดเล่น เพลงพื้นหลังหยุดชั่วคราวระหว่างดู แล้วเล่นต่อเมื่อพักหรือจบคลิป
 
+   INTERN_CONTACTS — การ์ดช่องทางติดต่อ 2 ใบ อยู่ท้ายไฟล์นี้และท้ายหน้าความทรงจำ
+   tee / muay  : ข้อมูลของน้องตี๋ / น้องหมวย แยกกัน
+   fullName    : ชื่อ–นามสกุลจริง   |   nickname : ชื่อเล่น
+   photo       : พาธรูปของแต่ละคน เช่น "images/tee.jpg" / "images/muay.jpg" (ว่างหรือรูปเสีย = แสดงชื่อเล่นแทน)
+   facebookName: ชื่อบัญชีเฟซบุ๊กที่แสดงข้างไอคอน
+   facebook    : ลิงก์เฟซบุ๊กเต็ม เช่น https://www.facebook.com/...
+   instagramName: ชื่อบัญชีไอจีที่แสดงข้างไอคอน
+   instagram   : ลิงก์ไอจีเต็ม เช่น https://www.instagram.com/...
+   phone       : เบอร์โทร   |   email : อีเมล
+   ไอคอนและชื่อบัญชีอยู่ในแถวเดียวกัน กดได้ทั้งแถวเมื่อใส่ลิงก์แล้ว ถ้าใส่แค่ชื่อจะแสดงเป็นข้อความ
+   ชื่อ–นามสกุลว่างแสดงเป็น — ส่วนช่องทางติดต่อจะขึ้นเมื่อใส่ข้อมูลแล้ว
+
    ไฟล์รูป/คลิป ให้วางไว้ในโฟลเดอร์ media/
    • ตั้งชื่อไฟล์เป็นภาษาอังกฤษ ไม่มีเว้นวรรค เช่น outing-01.jpg
    • คลิปจาก iPhone (.mov) บางเครื่องเปิดไม่ได้ → แปลงเป็น .mp4 ก่อน
@@ -153,3 +165,29 @@ const MEMORIES = [
 `,
   },
 ];
+
+// ใส่รูป ชื่อบัญชี และลิงก์จริงของแต่ละคนได้ที่นี่ กดไอคอนหรือชื่อบัญชีเพื่อเปิดลิงก์ได้ทั้งแถว
+const INTERN_CONTACTS = {
+  tee: {
+    fullName: "",
+    nickname: "ตี๋",
+    photo: "",
+    facebookName: "wanchai.teangdee",
+    facebook: "https://www.facebook.com/wanchai.teangdee/",
+    instagramName: "@_jaotee.18",
+    instagram: "https://www.instagram.com/_jaotee.18/",
+    phone: "096-113-7886",
+    email: "",
+  },
+  muay: {
+    fullName: "",
+    nickname: "หมวย",
+    photo: "",
+    facebookName: "thitiporn.kanhaoakkharaphan",
+    facebook: "https://www.facebook.com/thitiporn.kanhaoakkharaphan",
+    instagramName: "@mua1.tk_",
+    instagram: "https://www.instagram.com/mua1.tk_/",
+    phone: "096-749-0032",
+    email: "",
+  },
+};

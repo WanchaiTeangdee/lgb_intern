@@ -650,6 +650,104 @@ body.farewell-in-view .mascot-dock { visibility: hidden; }
   70% { transform: translateY(0) scale(1.03, 0.97); }
 }
 
+/* ช่องทางติดต่อของน้องแต่ละคน */
+.intern-contacts {
+  max-width: 720px;
+  margin: 2.5rem auto 0;
+  padding-top: 2rem;
+  border-top: 1px dashed var(--line);
+  text-align: center;
+}
+.intern-contacts h2 { font-size: clamp(1.65rem, 5vw, 2.15rem); }
+.contacts-intro { max-width: 34rem; margin: 0.7rem auto 1.5rem; color: var(--muted); font-family: var(--f-hand); }
+.contact-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+.contact-card {
+  min-width: 0;
+  padding: clamp(1rem, 3vw, 1.4rem);
+  border: 1px solid color-mix(in srgb, var(--contact-accent, #7fb4d8) 45%, var(--line));
+  border-top: 4px solid var(--contact-accent, #7fb4d8);
+  border-radius: 18px;
+  background: linear-gradient(145deg, color-mix(in srgb, var(--contact-accent, #7fb4d8) 13%, var(--card)), var(--card) 70%);
+  box-shadow: 0 8px 22px rgba(59, 50, 44, 0.05);
+  text-align: left;
+}
+.contact-head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) clamp(3rem, 5vw, 3.75rem);
+  align-items: center;
+  column-gap: clamp(0.45rem, 1.5vw, 0.7rem);
+  min-width: 0;
+}
+.contact-avatar {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: clamp(4.5rem, 6vw, 5rem);
+  height: clamp(4.5rem, 6vw, 5rem);
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--contact-accent, #7fb4d8) 65%, #fff);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--contact-accent, #7fb4d8) 30%, #fff);
+  color: var(--ink);
+  font-family: var(--f-head);
+  font-size: 1.05rem;
+  white-space: nowrap;
+}
+.contact-avatar img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.contact-avatar-fallback { font-size: 1.2rem; }
+.contact-avatar[data-ok] .contact-avatar-fallback { visibility: hidden; }
+.contact-head h3 { min-width: 0; font-size: clamp(1.2rem, 3vw, 1.5rem); overflow-wrap: anywhere; }
+.contact-mascot { display: block; min-width: 0; width: 100%; }
+.contact-mascot svg { display: block; width: 100%; height: auto; overflow: visible; }
+/* ตัวการ์ตูนข้างชื่อเป็นท่านิ่ง แยกจากรูปโปรไฟล์ของน้อง */
+.contact-mascot .m-bob, .contact-mascot .m-shadow, .contact-mascot .m-head, .contact-mascot .m-eyes, .contact-mascot .m-arm { animation: none; }
+.contact-fullname { margin: 0.9rem 0 0; font-size: 0.95rem; font-weight: 500; line-height: 1.65; overflow-wrap: anywhere; }
+.contact-socials { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.6rem; margin-top: 1rem; }
+.contact-social {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 0.65rem;
+  width: 100%;
+  min-height: 48px;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--contact-accent, #7fb4d8) 55%, var(--line));
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--contact-accent, #7fb4d8) 13%, #fff);
+  color: var(--ink);
+  text-decoration: none;
+}
+.contact-social svg { display: block; width: 24px; height: 24px; color: color-mix(in srgb, var(--contact-accent, #7fb4d8) 45%, var(--ink)); }
+.contact-social-name { min-width: 0; font-size: 0.95rem; font-weight: 500; line-height: 1.6; overflow-wrap: anywhere; }
+.contact-social > small { color: var(--muted); font-size: 1.1rem; }
+a.contact-social:hover { border-color: var(--contact-accent, #7fb4d8); background: color-mix(in srgb, var(--contact-accent, #7fb4d8) 25%, #fff); }
+a.contact-social:focus-visible { outline: 2px dashed var(--accent); outline-offset: 3px; }
+.contact-links { display: grid; gap: 0.65rem; margin: 1.2rem 0 0; padding: 0; list-style: none; }
+.contact-links li { min-width: 0; }
+.contact-link {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 0.75rem;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.65rem 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+}
+a.contact-link:hover { border-color: var(--contact-accent, #7fb4d8); background: color-mix(in srgb, var(--contact-accent, #7fb4d8) 10%, #fff); }
+a.contact-link:focus-visible { outline: 2px dashed var(--accent); outline-offset: 3px; }
+.contact-channel { grid-column: 1; grid-row: 1; color: var(--muted); font-size: 0.78rem; line-height: 1.5; overflow-wrap: anywhere; }
+.contact-detail { grid-column: 1; grid-row: 2; min-width: 0; font-size: 0.95rem; font-weight: 500; line-height: 1.6; overflow-wrap: anywhere; }
+.contact-link > small { grid-column: 2; grid-row: 1 / span 2; font-size: 1.15rem; color: var(--muted); }
+.contact-empty { margin: 1.2rem 0 0; color: var(--muted); font-family: var(--f-hand); font-size: 0.95rem; line-height: 1.75; }
+
+@media (min-width: 560px) {
+  .contact-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
 .closing {
   margin: 2rem auto 0;
   padding: 2.5rem 1.5rem;

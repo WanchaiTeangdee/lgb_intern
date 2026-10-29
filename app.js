@@ -528,6 +528,76 @@
       </section>`;
   }
 
+  // ใช้เฉพาะลิงก์เว็บแบบเต็มสำหรับไอคอนโซเชียล
+  const contactWebUrl = (value) => {
+    try {
+      const url = new URL(String(value || "").trim());
+      return ["https:", "http:"].includes(url.protocol) && url.hostname ? url.href : "";
+    } catch { return ""; }
+  };
+
+  function contactSection() {
+    const config = (typeof INTERN_CONTACTS !== "undefined" ? INTERN_CONTACTS : null) || {};
+    const people = [
+      { key: "tee", name: "น้องตี๋", shortName: "ตี๋", color: "#7fb4d8" },
+      { key: "muay", name: "น้องหมวย", shortName: "หมวย", color: "#e8a0b3" },
+    ];
+    const icons = {
+      facebook: `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M14 8h3V4h-3c-3 0-5 2-5 5v2H6v4h3v7h4v-7h3l1-4h-4V9c0-.7.3-1 1-1Z"/></svg>`,
+      instagram: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>`,
+    };
+    const row = (label, value, href) => !value ? "" : `
+      <li>${href ? `<a class="contact-link" href="${esc(href)}">` : `<div class="contact-link">`}
+        <span class="contact-channel">${esc(label)}</span>
+        <span class="contact-detail">${esc(value)}</span>
+        ${href ? `<small aria-hidden="true">↗</small></a>` : "</div>"}
+      </li>`;
+    const cards = people.map((person) => {
+      const profile = config[person.key] || {};
+      const text = (key) => String(profile[key] || "").trim();
+      const fullName = text("fullName");
+      const nickname = text("nickname") || person.shortName;
+      const photo = text("photo");
+      const socials = [["facebook", "เฟซบุ๊ก"], ["instagram", "อินสตาแกรม"]].map(([key, label]) => {
+        const url = contactWebUrl(text(key));
+        const name = text(`${key}Name`);
+        if (!name && !url) return "";
+        const description = `${label}ของ${person.name}${name ? `: ${name}` : ""}`;
+        return `${url ? `<a class="contact-social" href="${esc(url)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(description)}" title="${esc(description)}">` : `<div class="contact-social">`}
+          ${icons[key]}<span class="contact-social-name">${esc(name || label)}</span>
+          ${url ? `<small aria-hidden="true">↗</small></a>` : "</div>"}`;
+      }).join("");
+      const phone = text("phone");
+      const email = text("email");
+      const phoneHref = /^\+?[\d\s().-]+$/.test(phone) && !/[\u0000-\u001f\u007f]/.test(phone) && phone.replace(/\D/g, "").length >= 3
+        ? `tel:${phone.replace(/[^\d+]/g, "")}` : "";
+      const emailHref = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && !/[\u0000-\u001f\u007f]/.test(email)
+        ? `mailto:${encodeURIComponent(email).replace(/%40/gi, "@")}` : "";
+      const details = row("โทรศัพท์", phone, phoneHref) + row("อีเมล", email, emailHref);
+      return `
+        <article class="contact-card" style="--contact-accent:${esc(person.color)}">
+          <header class="contact-head">
+            <span class="contact-avatar" aria-hidden="true"${photo ? " data-ok" : ""}>
+              <span class="contact-avatar-fallback">${esc(person.shortName)}</span>
+              ${photo ? `<img src="${esc(photo)}" alt="" loading="lazy" onerror="__mediaFail(this)">` : ""}
+            </span>
+            <h3>${esc(person.name)}</h3>
+            <span class="contact-mascot" data-contact-mascot="${person.key === "tee" ? "boy" : "girl"}" aria-hidden="true"></span>
+          </header>
+          <p class="contact-fullname">${fullName ? esc(`${fullName} (${nickname})`) : "ชื่อ–นามสกุล: —"}</p>
+          ${socials ? `<div class="contact-socials">${socials}</div>` : ""}
+          ${details ? `<ul class="contact-links">${details}</ul>` : ""}
+          ${!socials && !details ? `<p class="contact-empty">เดี๋ยวน้องมาแปะช่องทางติดต่อไว้นะ 💛</p>` : ""}
+        </article>`;
+    }).join("");
+    return `
+      <section class="intern-contacts reveal" aria-labelledby="contacts-title">
+        <h2 id="contacts-title">ยังทักหากันได้เสมอนะ</h2>
+        <p class="contacts-intro">ช่องทางติดต่อของน้องตี๋กับน้องหมวย</p>
+        <div class="contact-grid">${cards}</div>
+      </section>`;
+  }
+
   /* ------------------------- หน้าความทรงจำรวม ------------------------- */
   function renderGallery() {
     const mems = MEMORY_LIST;
@@ -557,6 +627,8 @@
         </section>
 
         ${farewellSection()}
+
+        ${contactSection()}
 
         <footer class="foot">ด้วยรัก จาก ${esc(SITE.from)}</footer>
       </main>`;

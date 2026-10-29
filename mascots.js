@@ -74,6 +74,17 @@
 
   // ใช้ภาพน้องๆ ชุดเดียวกันในฉากส่งน้อง แม้ซ่อนตัวการ์ตูนติดขอบจอไว้
   window.MascotArt = { boy: SVG_BOY, girl: SVG_GIRL };
+
+  // ตัวการ์ตูนข้างชื่อในการ์ดติดต่อ ใช้ได้แม้ปิดตัวการ์ตูนติดขอบจอ
+  const fillContactMascots = () => {
+    document.querySelectorAll(".contact-mascot[data-contact-mascot]").forEach((slot) => {
+      const art = slot.dataset.contactMascot === "boy" ? SVG_BOY : slot.dataset.contactMascot === "girl" ? SVG_GIRL : "";
+      if (art && !slot.querySelector("svg")) slot.innerHTML = art;
+    });
+  };
+  addEventListener("hashchange", fillContactMascots);
+  addEventListener("pageshow", (event) => { if (event.persisted) fillContactMascots(); });
+  fillContactMascots();
   if (!mc) return;
 
   const side = (pos, key, svg) => {
