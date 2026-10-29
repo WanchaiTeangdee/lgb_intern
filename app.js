@@ -622,15 +622,14 @@
 
         ${memoryVideoSection()}
 
-        <section class="closing reveal">
-          <a class="btn" href="#/">กลับหน้าแรก</a>
-        </section>
-
         ${farewellSection()}
 
         ${contactSection()}
 
-        <footer class="foot">ด้วยรัก จาก ${esc(SITE.from)}</footer>
+        <footer class="foot">
+          <p>ด้วยรัก จาก ${esc(SITE.from)}</p>
+          <a class="btn" href="#/">กลับหน้าแรก</a>
+        </footer>
       </main>`;
 
     bindMedia(app.querySelector(".person"));
