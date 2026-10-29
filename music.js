@@ -72,7 +72,12 @@
     if (audio) return audio;
     audio = new Audio();
     audio.preload = "none";
-    audio.addEventListener("playing", () => { if (!isYt()) { playing = true; paint(); } });
+    audio.addEventListener("playing", () => {
+      if (isYt()) return;
+      if (ducked || userPaused || !wantPlay) { audio.pause(); playing = false; }
+      else playing = true;
+      paint();
+    });
     audio.addEventListener("pause", () => { if (!isYt() && !audio.ended) { playing = false; paint(); } });
     audio.addEventListener("ended", () => { if (!isYt()) goNext(1); });
     audio.addEventListener("error", () => { if (!isYt()) trackFailed("ไฟล์เสียงเปิดไม่ได้"); });
@@ -90,6 +95,12 @@
     playing = false;
     silenceAll();
     const t = cur();
+    if (ducked || userPaused || !wantPlay) {
+      pendingLoad = true;
+      paint();
+      return;
+    }
+    pendingLoad = false;
     if (t.src) {
       const a = getAudio();
       a.src = t.src;
@@ -144,7 +155,8 @@
 
   const start = () => {
     wantPlay = true;
-    if (!started) return load(idx);
+    if (ducked) return;
+    if (!started || pendingLoad) return load(idx);
     if (isYt() ? ytReady : true) (isYt() ? yt.playVideo() : getAudio().play().catch(() => {}));
   };
   const stop = () => {
@@ -245,7 +257,7 @@
   document.addEventListener(
     "click",
     (e) => {
-      if (ui.contains(e.target) || userPaused || playing || wantPlay) return;
+      if (ui.contains(e.target) || e.target.closest(".memory-film-player") || ducked || userPaused || playing || wantPlay) return;
       start();
     },
     { capture: true }
@@ -253,13 +265,18 @@
 
   // ให้ส่วนอื่นเรียกหยุด/เล่นต่อ ตอนเปิดดูคลิปในแกลเลอรี
   window.Music = {
-    state: () => ({ idx, playing, wantPlay, started, ytReady, failed: { ...failed } }),
+    state: () => ({ idx, playing, wantPlay, started, ytReady, ducked, failed: { ...failed } }),
     duck() {
-      if (playing) { ducked = true; silenceAll(); }
+      wantPlay = wantPlay || playing;
+      ducked = true;
+      playing = false;
+      silenceAll();
+      paint();
     },
     restore() {
-      if (ducked && !userPaused) { ducked = false; start(); }
+      const resume = ducked && wantPlay && !userPaused;
       ducked = false;
+      if (resume) start();
     },
   };
 
@@ -277,12 +294,17 @@
           onReady: () => {
             ytReady = true;
             yt.setVolume(vol);
+            if (ducked || userPaused || !wantPlay) return;
             if (pendingLoad || (wantPlay && isYt())) { pendingLoad = false; load(idx); }
           },
           onStateChange: (e) => {
             if (!isYt()) return;   // เหตุการณ์ค้างจากเพลงก่อนหน้า (กำลังเล่นไฟล์เสียงอยู่)
             const S = YT.PlayerState;
-            if (e.data === S.PLAYING) { playing = true; yt.setVolume(vol); paint(); }
+            if (e.data === S.PLAYING) {
+              if (ducked || userPaused || !wantPlay) { yt.pauseVideo(); playing = false; }
+              else { playing = true; yt.setVolume(vol); }
+              paint();
+            }
             else if (e.data === S.PAUSED) { playing = false; paint(); }
             else if (e.data === S.ENDED) goNext(1);   // จบเพลง → เพลงถัดไป / วนกลับเพลงแรก
           },

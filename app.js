@@ -306,6 +306,53 @@
     });
   }
 
+  // คลิปตัดต่อแยกจากเรื่องเล่า อยู่ก่อนปุ่มกลับหน้าแรก
+  function memoryVideoSection() {
+    const config = (typeof MEMORY_VIDEO !== "undefined" ? MEMORY_VIDEO : null) || {};
+    const src = String(config.src || "").trim();
+    const poster = String(config.poster || "").trim();
+    return `
+      <section class="memory-film reveal" aria-labelledby="memory-film-title">
+        <h2 id="memory-film-title">คลิปความทรงจำของเรา</h2>
+        <p class="memory-film-intro">รวมช่วงเวลาดีๆ ของน้องๆ กับพี่ๆ LGB ไว้ด้วยกัน</p>
+        <div class="memory-film-frame">
+          ${src ? `<video class="memory-film-player" src="${esc(src)}"${poster ? ` poster="${esc(poster)}"` : ""} controls playsinline preload="metadata" aria-label="คลิปความทรงจำของเรา"></video>` : ""}
+          <div class="memory-film-placeholder"${src ? " hidden" : ""}>
+            <span class="memory-film-icon" aria-hidden="true">🎬</span>
+            <p class="memory-film-message">คลิปความทรงจำกำลังมาแล้ว</p>
+            <p>แล้วกลับมาดูด้วยกันนะ 💛</p>
+          </div>
+        </div>
+      </section>`;
+  }
+
+  function pauseMemoryVideo() {
+    app.querySelector(".memory-film-player")?.pause();
+  }
+
+  function bindMemoryVideo() {
+    const video = app.querySelector(".memory-film-player");
+    if (!video) return;
+    const restore = () => {
+      const current = app.querySelector(".memory-film-player");
+      // เหตุการณ์พักคลิปอาจมาหลังเปิด lightbox หรือเปลี่ยนหน้าแล้ว
+      if (lb.hidden && (!current || current.paused)) window.Music?.restore();
+    };
+    video.addEventListener("play", () => window.Music?.duck());
+    video.addEventListener("pause", restore);
+    video.addEventListener("ended", restore);
+    video.addEventListener("error", () => {
+      const placeholder = video.parentElement?.querySelector(".memory-film-placeholder");
+      video.pause();
+      video.remove();
+      if (placeholder) {
+        placeholder.hidden = false;
+        placeholder.querySelector(".memory-film-message").textContent = "ตอนนี้ยังเปิดคลิปไม่ได้";
+      }
+      restore();
+    });
+  }
+
   /* ------------------------- หน้าความทรงจำรวม ------------------------- */
   function renderGallery() {
     const mems = MEMORY_LIST;
@@ -328,6 +375,8 @@
           }
         </section>
 
+        ${memoryVideoSection()}
+
         <section class="closing reveal">
           <a class="btn" href="#/">กลับหน้าแรก</a>
         </section>
@@ -336,6 +385,7 @@
       </main>`;
 
     bindMedia(app.querySelector(".person"));
+    bindMemoryVideo();
     observeReveals();
   }
 
@@ -376,6 +426,7 @@
   const validMedia = () => [...app.querySelectorAll("[data-media][data-ok]")].map((b) => +b.dataset.media);
 
   function openLightbox(i) {
+    pauseMemoryVideo();
     lbIdx = i;
     showLightbox();
     lb.hidden = false;
@@ -423,6 +474,7 @@
 
   /* ------------------------------ Router ------------------------------ */
   function route() {
+    pauseMemoryVideo();
     closeLightbox();
     const m = location.hash.match(/^#\/to\/([^/?#]+)/);
     if (location.hash.startsWith("#/memories")) renderGallery();

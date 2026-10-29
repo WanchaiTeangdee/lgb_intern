@@ -444,6 +444,49 @@ button.shot.yt:hover img { transform: scale(1.4); }
   font-size: 0.85rem;
 }
 
+/* คลิปความทรงจำก่อนท้ายหน้า */
+.memory-film {
+  max-width: 800px;
+  margin: 4rem auto 0;
+  text-align: center;
+}
+.memory-film h2 { font-size: clamp(1.65rem, 5vw, 2.2rem); }
+.memory-film-intro {
+  margin: 0.65rem auto 1.5rem;
+  max-width: 32rem;
+  color: var(--muted);
+  font-family: var(--f-hand);
+}
+.memory-film-frame {
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 4px 10px rgba(59, 50, 44, 0.05), 0 16px 36px rgba(59, 50, 44, 0.1);
+}
+.memory-film-player {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 11px;
+  background: #211a17;
+  object-fit: contain;
+}
+.memory-film-player:focus-visible { outline: 2px dashed var(--accent); outline-offset: 4px; }
+.memory-film-placeholder {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 0.4rem;
+  aspect-ratio: 16 / 9;
+  padding: clamp(0.85rem, 3vw, 1.75rem);
+  border-radius: 11px;
+  background: linear-gradient(135deg, var(--paper), var(--paper-2));
+  color: var(--muted);
+}
+.memory-film-icon { font-size: clamp(2rem, 6vw, 3rem); line-height: 1.2; }
+.memory-film-placeholder p { max-width: 30rem; margin: 0; line-height: 1.6; font-size: 0.95rem; }
+
 .closing {
   margin: 2rem auto 0;
   padding: 2.5rem 1.5rem;
