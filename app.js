@@ -6,16 +6,7 @@
   const esc = (s) =>
     String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 
-  const fmtDate = (d) => {
-    if (!d) return "";
-    const dt = new Date(d + "T00:00:00");
-    if (isNaN(dt)) return esc(d);
-    return dt.toLocaleDateString("th-TH", { day: "numeric", month: "long", year: "numeric" });
-  };
-
   const findPerson = (id) => PEOPLE.find((p) => p.id === id);
-
-  const sharedMemories = () => [...MEMORY_LIST].sort((a, b) => (a.date || "").localeCompare(b.date || ""));
 
   // จดหมายของพี่คนหนึ่ง → [{ author, text, media }, ...] เฉพาะฉบับที่เขียนแล้ว
   // แต่ละฉบับเขียนเป็น `ข้อความ` ล้วน หรือ { text: `ข้อความ`, media: [รูป/คลิป] } ก็ได้
@@ -162,10 +153,7 @@
         <article>
           ${media}
           <div class="memory-text">
-            <p class="meta">
-              ${m.date ? `<time datetime="${esc(m.date)}">${fmtDate(m.date)}</time>` : ""}
-              ${m.place ? `<span class="place">· ${esc(m.place)}</span>` : ""}
-            </p>
+            ${m.place ? `<p class="meta"><span class="place">${esc(m.place)}</span></p>` : ""}
             <h3>${esc(m.title)}</h3>
             ${m.description ? `<div class="desc">${paragraphs(m.description)}</div>` : ""}
           </div>
@@ -320,7 +308,7 @@
 
   /* ------------------------- หน้าความทรงจำรวม ------------------------- */
   function renderGallery() {
-    const mems = sharedMemories();
+    const mems = MEMORY_LIST;
     gallery = [];
     document.title = `ความทรงจำของเรา · ${SITE.title}`;
     const back = lastPerson
