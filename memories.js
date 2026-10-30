@@ -169,7 +169,7 @@ const MEMORIES = [
 // ใส่รูป ชื่อบัญชี และลิงก์จริงของแต่ละคนได้ที่นี่ กดไอคอนหรือชื่อบัญชีเพื่อเปิดลิงก์ได้ทั้งแถว
 const INTERN_CONTACTS = {
   tee: {
-    fullName: "",
+    fullName: "นายวันชัย เที่ยงดี",
     nickname: "ตี๋",
     photo: "",
     facebookName: "wanchai.teangdee",
@@ -177,10 +177,10 @@ const INTERN_CONTACTS = {
     instagramName: "@_jaotee.18",
     instagram: "https://www.instagram.com/_jaotee.18/",
     phone: "096-113-7886",
-    email: "",
+    email: "wanchaiteangdee@gmail.com",
   },
   muay: {
-    fullName: "",
+    fullName: "นางสาวฐิติพร กัณหอัครพันธ์",
     nickname: "หมวย",
     photo: "",
     facebookName: "thitiporn.kanhaoakkharaphan",
@@ -188,6 +188,6 @@ const INTERN_CONTACTS = {
     instagramName: "@mua1.tk_",
     instagram: "https://www.instagram.com/mua1.tk_/",
     phone: "096-749-0032",
-    email: "",
+    email: "thitiporn.kanhaoakkharaphan@gmail.com",
   },
 };
