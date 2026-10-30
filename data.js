@@ -62,6 +62,7 @@ const PEOPLE = [
   { id: "big",      name: "พี่บิ๊ก",      avatar: "images/people/big.jpg",      emoji: "💻", color: "#d6d2c4", gender: "male" },
   { id: "nick",     name: "พี่นิค",      avatar: "images/people/nick.jpg",     emoji: "🦊", color: "#f6c99a", gender: "male" },
   { id: "james",    name: "พี่เจมส์",     avatar: "images/people/james.jpg",    emoji: "🕶️", color: "#c3cfe8", gender: "male" },
+  { id: "champ",    name: "พี่แชมป์",     avatar: "images/people/champ.jpg",    emoji: "🏆", color: "#f0d9a0", gender: "male" },
 ];
 
 /* ---------------------------------------------------------------------

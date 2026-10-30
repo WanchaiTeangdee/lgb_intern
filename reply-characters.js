@@ -33,6 +33,7 @@
     big:      { hair: "fringe",    ink: "#302b30", shirt: "#a49e92", outfit: "jacket",   skin: "#edc3a2", accessory: "square" },
     nick:     { hair: "buzz",      ink: "#47312c", shirt: "#dca16c", outfit: "stripe",   skin: "#e8b895", accessory: "none" },
     james:    { hair: "slick",     ink: "#342b35", shirt: "#8c9ec5", outfit: "polo",     skin: "#f6d1b6", accessory: "sunglasses" },
+    champ:    { hair: "quiff",     ink: "#3b2f2c", shirt: "#d8b05c", outfit: "hoodie",   skin: "#f3cdb0", accessory: "round" },
   };
 
   const shortHair = {
